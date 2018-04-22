@@ -1,3 +1,11 @@
+# To run tests 
+
+```
+go get github.com/eskianis/optionschallenge
+cd $GOPATH/src/github.com/eskianis/optionschallenge
+go test -v
+```
+
 # Code test
 
 This code test arises from a practical idea, that can be summarized as follows.
