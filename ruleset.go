@@ -9,10 +9,18 @@ import (
 // AddDeb(a,b) means
 // a->a, b
 // b->b
-// and
+// and then
+// AddDeb(b,c) means
+// a->a, b, c
+// b->b, c
+// c->c
+// and then
 // AddConflict(b,a) means
-// a->a, ~b
-// b->b, ~a
+// a->a, b, c, ~b
+// b->b, c, ~a
+// c->c
+// In case a node includes the same node in its Dep and Conflict arrays then the RuleSet is
+// not coherent
 type RuleSet struct {
 	isCoherent bool
 	nodes      []*Node
@@ -99,15 +107,9 @@ func (r *RuleSet) addConflict(opt1, opt2 string) {
 // directly or indirectly, on another option and also be mutually exclusive with it.
 func (r *RuleSet) IsCoherent() bool {
 
-	if !r.isCoherent {
-		return r.isCoherent
-	}
-
 	if r.isCoherent {
 		for _, a := range r.nodes {
-
 			r.isCoherent = a.isCoherent()
-
 			if !r.isCoherent {
 				break
 			}

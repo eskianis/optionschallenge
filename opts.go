@@ -19,8 +19,9 @@ func New(rs *RuleSet) *Opts {
 	return &opts
 }
 
+// Toggle will toggle an option - meaning if its off then it will be turned off and vice versa.
+// Toggling an option will also turn on/off other options based on the RuleSet.Deps and RuleSet.Conflicts
 func (r *Opts) Toggle(opt1 string) {
-
 	if !r.ruleSet.IsCoherent() {
 		return
 	}
@@ -36,6 +37,7 @@ func (r *Opts) Toggle(opt1 string) {
 	// this means that the option is on so we need to turn it off
 	if isTurnedOn {
 		r.turnOffRecursively(opt1)
+		return
 	}
 
 	// this means that the option is off but there are conflicts
@@ -50,7 +52,6 @@ func (r *Opts) Toggle(opt1 string) {
 			r.turnOffRecursively(o.Name)
 		}
 	}
-
 }
 
 // StringSlice returns a list of options that are turned on
@@ -80,7 +81,6 @@ func (r *Opts) refreshOptions() {
 			break
 		}
 	}
-
 }
 
 // getNodesDependentOn filters all nodes that depend on a node with name defined by the opt param
@@ -102,7 +102,6 @@ func (r *Opts) getNodesDependentOn(opt string, includeSef bool) (out []*Node) {
 				}
 			}
 		}
-
 	}
 
 	return
